@@ -60,6 +60,11 @@ export default [
         path: Route.DOCKER_HUB_VIEW_PATH,
         name: Route.DOCKER_HUB_VIEW_NAME,
         component: () => import('@/components/DockerHubView/DockerHubView')
+      },
+      {
+        path: Route.SETTINGS_CONFIG_PATH,
+        name: Route.SETTINGS_CONFIG_NAME,
+        component: () => import('@/components/SettingConfigView.vue')
       }
     ]
   },

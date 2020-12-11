@@ -15,28 +15,28 @@ if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
-router.beforeEach((to, from, next) => {
-  iView.LoadingBar.start()
-  next()
+function init(config){
+  if (is.renderer()) Vue.use(require('vue-electron'))
+  Vue.http = Vue.prototype.$http = axios
+  Vue.config.productionTip = false
+
+  Vue.use(iView, { locale })
+  Vue.use(Resource)
+  /* eslint-disable no-new */
+  new Vue({
+    components: { App },
+    router,
+    store,
+    template: '<App/>'
+  }).$mount('#app')
+
+}
+
+store.dispatch('preference/fetchPreference')
+.then((config) => {
+  console.info('[Dockeron] load preference:', config)
+  init(config)
 })
-
-router.afterEach((to, from, next) => {
-  iView.LoadingBar.finish()
+.catch((err) => {
+  alert(err)
 })
-
-
-
-if (is.renderer()) Vue.use(require('vue-electron'))
-Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = false
-
-Vue.use(iView, { locale })
-Vue.use(Resource)
-
-/* eslint-disable no-new */
-new Vue({
-  components: { App },
-  router,
-  store,
-  template: '<App/>'
-}).$mount('#app')

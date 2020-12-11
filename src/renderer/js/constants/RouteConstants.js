@@ -33,3 +33,6 @@ export const PLUGINS_VIEW_PATH = 'plugins'
 
 export const DOCKER_HUB_VIEW_NAME = 'docker-hub-view'
 export const DOCKER_HUB_VIEW_PATH = 'docker-hub'
+
+export const SETTINGS_CONFIG_NAME = 'setting-conf'
+export const SETTINGS_CONFIG_PATH = 'setting-config'

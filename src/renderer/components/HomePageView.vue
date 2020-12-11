@@ -132,6 +132,11 @@
             this.loadPing()
             notify(`The network is ${this.ping} !`)
             break
+          case 'menu-settings-config':
+            this.$router.push({
+              path: Route.HOME_PAGE_PATH + Route.SETTINGS_CONFIG_PATH
+            })
+            break
           default:
             console.log('default')
             break

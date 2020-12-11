@@ -1,10 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './routes'
+import iView from 'iview'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  iView.LoadingBar.start()
+  next()
+})
+
+router.afterEach((to, from, next) => {
+  iView.LoadingBar.finish()
+})
+
+export default router

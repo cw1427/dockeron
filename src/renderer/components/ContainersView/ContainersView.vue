@@ -50,14 +50,14 @@
   import ContainerCreationForm from './ContainerCreationForm'
   import ContainerRunForm from './ContainerRunForm'
 
-  import docker from '../../js/docker'
-  import notify from '../../js/notify'
-  import notNull from '../../js/notNull'
-  import parseRepoTag from '../../js/parseRepoTag'
-  import formatBytes from '../../js/formatBytes'
-  import updateInfo from '../../js/updateInfo'
-  import ContainerStateToColor from '../../js/ContainerStateToColor'
-  import { SINGLE_CONTAINER_VIEW_NAME } from '../../js/constants/RouteConstants'
+  import docker from '@/js/docker'
+  import notify from '@/js/notify'
+  import notNull from '@/js/notNull'
+  import parseRepoTag from '@/js/parseRepoTag'
+  import formatBytes from '@/js/formatBytes'
+  import updateInfo from '@/js/updateInfo'
+  import ContainerStateToColor from '@/js/ContainerStateToColor'
+  import { SINGLE_CONTAINER_VIEW_NAME } from '@/js/constants/RouteConstants'
 
   export default {
     components: {
