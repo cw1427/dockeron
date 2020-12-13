@@ -14,16 +14,28 @@
                         <Input v-model="form.port" placeholder="Enter docker engine port..."></Input>
                     </FormItem>
                      <FormItem label="CA path" prop="ca">
-                      <mo-select-directory
-                          slot="append"
-                          @selected="onDirectorySelected"
-                      />
+                       <Input v-model="form.ca" placeholder="Select CA cert file...">
+                        <mo-select-file
+                            slot="append"
+                            @selected="onDirectorySelected('ca',...arguments)"
+                        />
+                       </Input>
                     </FormItem>
                      <FormItem label="Client cert path" prop="cert">
-
+                        <Input v-model="form.cert" placeholder="Select Key cert file...">
+                          <mo-select-file
+                              slot="append"
+                              @selected="onDirectorySelected('cert',...arguments)"
+                          />
+                        </Input>
                     </FormItem>
                      <FormItem label="Client key path" prop="key">
-
+                          <Input v-model="form.key" placeholder="Select Key cert file...">
+                          <mo-select-file
+                              slot="append"
+                              @selected="onDirectorySelected('key',...arguments)"
+                          />
+                          </Input>
                     </FormItem>
                     <FormItem>
                         <Button type="primary">Submit</Button>
@@ -35,11 +47,11 @@
 </template>
 
 <script>
-  import SelectDirectory from '@/components/Native/SelectDirectory.vue'
+  import SelectFile from '@/components/Native/SelectFile'
   export default {
     name: 'setting-conf',
     components: {
-        [SelectDirectory.name]: SelectDirectory,
+        [SelectFile.name]: SelectFile,
     },
     props: {
 
@@ -68,14 +80,23 @@
 
       },
 
-      onDirectorySelected (dir) {
-        this.form.ca = dir
+      onDirectorySelected (type, dir) {
+        switch (type) {
+          case 'ca':
+            this.form.ca = dir
+            break
+          case 'cert':
+            this.form.cert = dir
+            break
+          case 'key':
+            this.form.key = dir
+            break
+        }
       },
 
 
     },
     created () {
-      console.log(SelectDirectory.name)
     }
   }
 </script>
