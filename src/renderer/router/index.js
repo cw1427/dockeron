@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './routes'
-import iView from 'iview'
+import ViewUI from 'view-design';
 
 Vue.use(Router)
 
@@ -11,12 +11,12 @@ const router =  new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  iView.LoadingBar.start()
+  ViewUI.LoadingBar.start()
   next()
 })
 
 router.afterEach((to, from, next) => {
-  iView.LoadingBar.finish()
+  ViewUI.LoadingBar.finish()
 })
 
 export default router

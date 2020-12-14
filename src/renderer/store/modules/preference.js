@@ -7,7 +7,6 @@
 import api from '@/api'
 
 const state = {
-  engineMode: 'MAX',
   config: {port:2376,host:'127.0.0.1',ca:'', pem:'', key:''}
 }
 

@@ -2,16 +2,15 @@
   <div>
       <Card >
                 <p slot="title">
-                    <Icon type="gear-b"></Icon>
+                    <Icon type="ios-build"></Icon>
                     <Span>Config page</Span>
                 </p>
-
-                <Form ref="filterForm" :model="form" :label-width="200" :rules="formRules">
+                <Form ref="form" :model="form" :label-width="200" :rules="formRules">
                     <FormItem label="Host name" prop="host">
                         <Input v-model="form.host" placeholder="Enter docker engine host..."></Input>
                     </FormItem>
                     <FormItem label="Port" prop="port">
-                        <Input v-model="form.port" placeholder="Enter docker engine port..."></Input>
+                        <Input v-model.number="form.port" placeholder="Enter docker engine port..."></Input>
                     </FormItem>
                      <FormItem label="CA path" prop="ca">
                        <Input v-model="form.ca" placeholder="Select CA cert file...">
@@ -38,8 +37,8 @@
                           </Input>
                     </FormItem>
                     <FormItem>
-                        <Button type="primary">Submit</Button>
-                        <Button style="margin-left: 8px">Cancel</Button>
+                        <Button type="primary" @click="handleSubmit">Save</Button>
+                        <Button style="margin-left: 8px" @click="handleReset">Reset</Button>
                     </FormItem>
                 </Form>
       </Card>
@@ -59,15 +58,17 @@
     data () {
       return {
         form: {
-          host:'127.0.0.1',
-          port:2376,
-          ca: null,
-          cert: null,
-          key: null
+          host: this.$store.state.preference.config.host,
+          port: this.$store.state.preference.config.port,
+          ca: this.$store.state.preference.config.ca,
+          cert: this.$store.state.preference.config.cert,
+          key: this.$store.state.preference.config.key
         },
         formRules: {
-          host:[{required: true, message: 'Please select one factory', trigger: 'blur'}],
-          port:[{required: true, message: 'Please select one factory', trigger: 'blur'}],
+          host:[{required: true, message: 'Please input host', trigger: 'blur'}],
+          port:[{
+            type: 'integer', message:'Wrong port', trigger: 'blur'
+          }],
           ca:[{required: true, message: 'Please select one factory', trigger: 'blur'}],
           cert:[{required: true, message: 'Please select one factory', trigger: 'blur'}],
           key:[{required: true, message: 'Please select one factory', trigger: 'blur'}],
@@ -77,7 +78,23 @@
     methods: {
 
       handleSubmit(){
+        this.$refs['form'].validate((valid) => {
+            if (valid) {
+              // keep the config into the store and flush to localstorage
+              this.$store.dispatch('preference/save',{...this.form})
+              this.$Message.success('Success')
+            } else {
+                this.$Message.error('Validation Failed!')
+            }
+        })
+      },
 
+      handleReset(){
+          this.form.host= this.$store.state.preference.config.host,
+          this.form.port= this.$store.state.preference.config.port,
+          this.form.ca=this.$store.state.preference.config.ca,
+          this.form.cert= this.$store.state.preference.config.cert,
+          this.form.key= this.$store.state.preference.config.key
       },
 
       onDirectorySelected (type, dir) {

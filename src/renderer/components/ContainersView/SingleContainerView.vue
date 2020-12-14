@@ -5,20 +5,21 @@
     </container-control-panel>
     <Tag class="container-state-tag" :color="stateToColor[status]">{{status}}</Tag>
     <br>
-    <tree-view :data="containerData" :options="{rootObjectKey: containerId}"></tree-view>
+     <vue-json-pretty :path="'containerId'" :data="containerData" :showLength="true" :virtual="true" > </vue-json-pretty>
+    <!--<tree-view :data="containerData" :options="{rootObjectKey: containerId}"></tree-view>-->
   </div>
 </template>
 
 <script>
   import ContainerControlPanel from './ContainerControlPanel'
-  import TreeView from '../TreeView/TreeView'
-
+  import VueJsonPretty from 'vue-json-pretty'
+  import 'vue-json-pretty/lib/styles.css'
   import ContainerStateToColor from '../../js/ContainerStateToColor'
 
   export default {
     components: {
       ContainerControlPanel,
-      TreeView
+      VueJsonPretty
     },
     data () {
       return {

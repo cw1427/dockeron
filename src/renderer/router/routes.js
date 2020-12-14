@@ -1,14 +1,24 @@
 import * as Route from '../js/constants/RouteConstants'
+import Main from '@/components/HomePageView'
 
 export default [
   {
     path: Route.HOME_PAGE_PATH,
     name: Route.HOME_PAGE_NAME,
-    component: () => import('@/components/HomePageView'),
+    meta: {
+        title: 'HomePage',
+        icon: 'ios-home'
+    },
+    redirect: Route.CONTAINERS_VIEW_PATH,
+    component: Main,
     children: [
       {
         path: Route.DEFAULT_VIEW_PATH,
         name: Route.DEFAULT_VIEW_NAME,
+        meta: {
+          icon: 'ios-cube',
+          title: 'Containers',
+        },
         component: () => import('@/components/ContainersView/ContainersView')
       },
       {
@@ -19,53 +29,55 @@ export default [
       {
         path: Route.SINGLE_CONTAINER_VIEW_PATH,
         name: Route.SINGLE_CONTAINER_VIEW_NAME,
+        meta: {
+          icon: 'md-construct',
+          title: 'Single',
+          hide: true,
+          hideInMenu: true,
+        },
         component: () => import('@/components/ContainersView/SingleContainerView')
       },
+
+    ]
+  },
+  {
+    path: '/image',
+    name: 'image',
+    meta: {
+        title: 'Image',
+        icon: 'ios-apps'
+    },
+    redirect: {'name':Route.IMAGES_VIEW_NAME},
+    component: Main,
+    children: [
       {
         path: Route.IMAGES_VIEW_PATH,
         name: Route.IMAGES_VIEW_NAME,
+        meta: {
+          hideInMenu: true,
+        },
         component: () => import('@/components/ImagesView/ImagesView')
       },
-      {
-        path: Route.SINGLE_IMAGE_VIEW_PATH,
-        name: Route.SINGLE_IMAGE_VIEW_NAME,
-        component: () => import('@/components/ImagesView/SingleImageView')
-      },
-      {
-        path: Route.VOLUMES_VIEW_PATH,
-        name: Route.VOLUMES_VIEW_NAME,
-        component: () => import('@/components/VolumesView/VolumesView')
-      },
-      {
-        path: Route.SINGLE_VOLUME_VIEW_PATH,
-        name: Route.SINGLE_VOLUME_VIEW_NAME,
-        component: () => import('@/components/VolumesView/SingleVolumeView')
-      },
-      {
-        path: Route.NETWORKS_VIEW_PATH,
-        name: Route.NETWORKS_VIEW_NAME,
-        component: () => import('@/components/NetworksView/NetworksView')
-      },
-      {
-        path: Route.SINGLE_NETWORK_VIEW_PATH,
-        name: Route.SINGLE_NETWORK_VIEW_NAME,
-        component: () => import('@/components/NetworksView/SingleNetworkView')
-      },
-      {
-        path: Route.PLUGINS_VIEW_PATH,
-        name: Route.PLUGINS_VIEW_NAME,
-        component: () => import('@/components/PluginsView/PluginsView')
-      },
-      {
-        path: Route.DOCKER_HUB_VIEW_PATH,
-        name: Route.DOCKER_HUB_VIEW_NAME,
-        component: () => import('@/components/DockerHubView/DockerHubView')
-      },
+    ]
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    meta: {
+        title: 'Setting',
+        icon: 'ios-build'
+    },
+    component: Main,
+    children: [
       {
         path: Route.SETTINGS_CONFIG_PATH,
         name: Route.SETTINGS_CONFIG_NAME,
-        component: () => import('@/components/SettingConfigView.vue')
-      }
+        meta: {
+          icon: 'md-construct',
+          title: 'Config',
+        },
+        component: () => import('@/components/SettingConfigView')
+      },
     ]
   },
   {

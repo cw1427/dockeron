@@ -1,5 +1,8 @@
 import * as types from '../mutation-types'
 
+/**
+ * The doker engine info containers
+ */
 const state = {
   info: {}
 }

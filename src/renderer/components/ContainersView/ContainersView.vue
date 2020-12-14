@@ -1,6 +1,8 @@
 <template>
   <div>
     <Button type="primary" icon="refresh" @click="refreshContainers">Refresh</Button>
+    <Button type="primary" icon="refresh" @click="showInfo=true">Info</Button>
+    <Button type="primary" icon="refresh" @click="showVersion=true">Version</Button>
     <Button type="primary" icon="plus-round" @click="containerCreateModal = true">Create</Button>
     <Modal v-model="containerCreateModal" title="Create Container"
         @on-ok="confirmCreation" @on-cancel="resetCreation">
@@ -42,6 +44,15 @@
     <div v-else>
       <pre>{{error}}</pre>
     </div>
+
+    <Modal v-model="showInfo" title="Info">
+      <vue-json-pretty  :data="info" :showLength="true" :virtual="true" > </vue-json-pretty>
+      <!--<tree-view :data="info"></tree-view>-->
+    </Modal>
+    <Modal v-model="showVersion" title="Version">
+      <vue-json-pretty  :data="version" :showLength="true" :virtual="true" > </vue-json-pretty>
+      <!--<tree-view :data="version"></tree-view>-->
+    </Modal>
   </div>
 </template>
 
@@ -58,12 +69,15 @@
   import updateInfo from '@/js/updateInfo'
   import ContainerStateToColor from '@/js/ContainerStateToColor'
   import { SINGLE_CONTAINER_VIEW_NAME } from '@/js/constants/RouteConstants'
+  import VueJsonPretty from 'vue-json-pretty'
+  import 'vue-json-pretty/lib/styles.css'
 
   export default {
     components: {
       ContainerControlPanel,
       ContainerCreationForm,
-      ContainerRunForm
+      ContainerRunForm,
+      VueJsonPretty
     },
     data () {
       return {
@@ -73,7 +87,12 @@
         stateToColor: ContainerStateToColor,
         containerCreateModal: false,
         containerRunModal: false,
-        listParamsModal: false
+        listParamsModal: false,
+        info: {},
+        version: {},
+        ping: '',
+        showInfo: false,
+        showVersion: false,
       }
     },
     watch: {
@@ -138,9 +157,37 @@
 
         updateInfo(this)
       },
-      formatBytes
+      formatBytes,
+      loadInfo () {
+        const updateInfo = info => {
+          this.info = info
+          this.$store.dispatch(VUEX_ACTION_UPDATE_INFO, info)
+        }
+
+        docker.info()
+          .then(updateInfo)
+          .catch(notify)
+      },
+      loadVersion () {
+        const updateVersion = version => {
+          this.version = version
+          this.$store.dispatch(VUEX_ACTION_UPDATE_VERSION, version)
+        }
+
+        docker.version()
+          .then(updateVersion)
+          .catch(notify)
+      },
     },
     created () {
+      this.$store.watch(state => state.info.info, newInfo => {
+        this.info = newInfo
+      })
+      this.$store.watch(state => state.version.version, newVersion => {
+        this.version = newVersion
+      })
+      this.loadInfo()
+      this.loadVersion()
       this.loadContainers()
     }
   }

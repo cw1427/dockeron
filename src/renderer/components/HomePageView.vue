@@ -1,6 +1,9 @@
 <template>
   <div class="layout">
     <div class="layout-menu">
+      <side-menu accordion :active-name="$route.name" collapsed="false" @on-select="turnToPage" :menu-list="menuList">
+      </side-menu>
+      <!--
       <Menu mode="horizontal" active-name="menu-containers" @on-select="onMenuSelect">
         <Menu-item name="menu-containers">
           <Icon type="cube"></Icon>Containers
@@ -43,16 +46,11 @@
           </Menu-item>
         </Submenu>
       </Menu>
+      -->
     </div>
     <div class="layout-content">
       <router-view></router-view>
     </div>
-    <Modal v-model="showInfo" title="Info">
-      <tree-view :data="info"></tree-view>
-    </Modal>
-    <Modal v-model="showVersion" title="Version">
-      <tree-view :data="version"></tree-view>
-    </Modal>
     <div class="layout-copy">
       &copy; dockeron, 2020
     </div>
@@ -63,7 +61,7 @@
 <script>
   import TreeView from './TreeView/TreeView'
   import StatusBar from './StatusBar'
-
+  import SideMenu from './SideMenu'
   import docker from '../js/docker'
   import notify from '../js/notify'
   import * as Route from '../js/constants/RouteConstants'
@@ -77,91 +75,18 @@
     name: 'home-page',
     components: {
       TreeView,
-      StatusBar
+      StatusBar,
+      SideMenu
     },
     data () {
       return {
         info: {},
         version: {},
         ping: '',
-        showInfo: false,
-        showVersion: false
       }
     },
     methods: {
-      onMenuSelect (selectedMenuName) {
-        console.log(selectedMenuName)
-        switch (selectedMenuName) {
-          case 'menu-containers':
-            this.$router.push({
-              path: Route.HOME_PAGE_PATH + Route.CONTAINERS_VIEW_PATH
-            })
-            break
-          case 'menu-images':
-            this.$router.push({
-              path: Route.HOME_PAGE_PATH + Route.IMAGES_VIEW_PATH
-            })
-            break
-          case 'menu-volumes':
-            this.$router.push({
-              path: Route.HOME_PAGE_PATH + Route.VOLUMES_VIEW_PATH
-            })
-            break
-          case 'menu-networks':
-            this.$router.push({
-              path: Route.HOME_PAGE_PATH + Route.NETWORKS_VIEW_PATH
-            })
-            break
-          case 'menu-plugins':
-            this.$router.push({
-              path: Route.HOME_PAGE_PATH + Route.PLUGINS_VIEW_PATH
-            })
-            break
-          case 'menu-docker-hub':
-            this.$router.push({
-              path: Route.HOME_PAGE_PATH + Route.DOCKER_HUB_VIEW_PATH
-            })
-            break
-          case 'menu-settings-info':
-            this.showInfo = true
-            break
-          case 'menu-settings-version':
-            this.showVersion = true
-            break
-          case 'menu-settings-ping':
-            this.loadPing()
-            notify(`The network is ${this.ping} !`)
-            break
-          case 'menu-settings-config':
-            this.$router.push({
-              path: Route.HOME_PAGE_PATH + Route.SETTINGS_CONFIG_PATH
-            })
-            break
-          default:
-            console.log('default')
-            break
-        }
-      },
-      loadInfo () {
-        const updateInfo = info => {
-          this.info = info
-          this.$store.dispatch(VUEX_ACTION_UPDATE_INFO, info)
-        }
 
-        docker.info()
-          .then(updateInfo)
-          .catch(notify)
-      },
-      loadVersion () {
-        const updateVersion = version => {
-          this.version = version
-          this.$store.dispatch(VUEX_ACTION_UPDATE_VERSION, version)
-        }
-
-        docker.version()
-          .then(updateVersion)
-          .catch(notify)
-      },
       loadPing () {
         const updateNetwork = ping => {
           this.ping = ping
@@ -170,17 +95,19 @@
         docker.ping()
           .then(updateNetwork)
           .catch(notify)
-      }
+      },
+      handleClick (item) {
+        this.turnToPage(item.name)
+      },
+      turnToPage (name) {
+        this.$router.push({
+          name: name
+        })
+      },
+
     },
     created () {
-      this.$store.watch(state => state.info.info, newInfo => {
-        this.info = newInfo
-      })
-      this.$store.watch(state => state.version.version, newVersion => {
-        this.version = newVersion
-      })
-      this.loadInfo()
-      this.loadVersion()
+
       this.loadPing()
 
       docker.getEvents()
@@ -192,7 +119,14 @@
           })
         })
         .catch(notify)
+    },
+    computed: {
+       menuList () {
+          return this.$store.getters.menuList
+      },
     }
+
+
   }
 </script>
 
