@@ -3,8 +3,21 @@ import Main from '@/components/HomePageView'
 
 export default [
   {
-    path: Route.HOME_PAGE_PATH,
-    name: Route.HOME_PAGE_NAME,
+    path: "/dashboard",
+    name: 'dashboard',
+    component: ()=> import('@/components/Dashboard'),
+    redirect: 'engines',
+    children:[
+      {
+        path: '/engines',
+        name: 'engines',
+        component: () => import('@/components/EngineView/Engines')
+      },
+    ]
+  },
+  {
+    path: '/containers',
+    name: 'containers',
     meta: {
         title: 'HomePage',
         icon: 'ios-home'
@@ -82,6 +95,6 @@ export default [
   },
   {
     path: '*',
-    redirect: '/'
+    redirect: '/dashboard'
   }
 ]

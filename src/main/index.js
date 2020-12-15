@@ -1,5 +1,5 @@
 // 'use strict'
-
+import is from 'electron-is'
 import { app, BrowserWindow } from 'electron'
 import setIPCChannels from './setIPCChannels'
 import {
@@ -31,9 +31,11 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     height: 600,
-    // transparent: true,
+    title: 'dockeron',
+    transparent: !is.windows(),
     titleBarStyle: 'hiddenInset',
     width: 1000,
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true,

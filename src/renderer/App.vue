@@ -1,12 +1,24 @@
 <template>
   <div id="app" class="app">
-    <router-view></router-view>
+        <mo-title-bar
+          v-if="isRenderer"
+        />
+        <router-view></router-view>
   </div>
 </template>
 
 <script>
+  import is from 'electron-is'
+  import TitleBar from '@/components/Native/TitleBar'
   export default {
-    name: 'App'
+    name: 'App',
+    components: {
+      [TitleBar.name]: TitleBar,
+    },
+    computed: {
+      isRenderer () { return is.renderer() },
+    },
+
   }
 </script>
 
@@ -25,4 +37,14 @@
     overflow: hidden;
     ::-webkit-scrollbar {display:none;}
   }
+  //main-container全局样式
+.app-main{
+  min-height: 100%;
+  height: 768px;
+}
+
+.app-container {
+  padding-left: 0px;
+}
+
 </style>

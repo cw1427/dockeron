@@ -22,6 +22,10 @@ export default class Api {
     this.config = result
   }
 
+  loadEngines() {
+    return localStorage.engines
+  }
+
   fetchPreference () {
     return new Promise((resolve) => {
       this.loadConfig()
@@ -29,8 +33,19 @@ export default class Api {
     })
   }
 
+  fetchEngines () {
+    return new Promise((resolve) => {
+      resolve( this.loadEngines())
+    })
+  }
+
   savePreference (params = {}) {
       return this.savePreferenceToLocalStorage(params)
+  }
+
+  saveEngines (params = {}){
+    localStorage.engines = params
+    return true
   }
 
   savePreferenceToLocalStorage (params) {
