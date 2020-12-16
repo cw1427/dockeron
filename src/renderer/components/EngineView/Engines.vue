@@ -3,14 +3,30 @@
    <Row style="height:5%">
    </Row>
    <Row>
-       <Col span='23' offset="1">
+       <Col span='22' offset="1">
             <Button type="primary" icon="refresh" @click="addShow()">Add docker engine</Button>
-
-            <br>
+            <br/>
             <div v-if="hasEngines">
-                <Card v-for="container in addedEngines" :key="container.Id" class="container-card">
+              <template v-for="(engine,index) in engines">
+                <template v-if="index % 3 ==0">
+                  <Row  style="padding: 2em 0" :gutter="10" :key="`row_${index}`">
+                     <Col span="8" >
+                      <engine-card :engine="engine"/>
+                     </Col>
+                     <template v-if="index+1<engines.length">
+                        <Col span="8" >
+                            <engine-card :engine="engines[index+1]"/>
+                        </Col>
+                     </template>
+                      <template v-if="index+2<engines.length">
+                        <Col span="8" >
+                            <engine-card :engine="engines[index+2]"/>
+                        </Col>
+                     </template>
+                  </Row>
+                 </template>
+              </template>
 
-                </Card>
             </div>
             <div v-else>
             <pre>Try to add one docker engine</pre>
@@ -70,16 +86,18 @@
 
   import docker from '@/js/docker'
   import SelectFile from '@/components/Native/SelectFile'
+  import EngineCard from './components/engineCard'
   import _ from 'lodash'
 
   export default {
     name: 'engines',
     components: {
         [SelectFile.name]: SelectFile,
+        EngineCard
     },
     data () {
       return {
-        engines: {},
+        engines: null,
         hasEngines:false,
         showAdd:false,
         form: {
@@ -108,28 +126,30 @@
     methods: {
 
       loadEngines () {
+          this.engines = Object.values(this.$store.state.preference.engines)
+          this.hasEngines = (!_.isNil(this.engines)) && this.engines.length>0
       },
 
       handleSubmit(){
         this.$refs['form'].validate((valid) => {
             if (valid) {
               // check localstorage engines config to add this new one
-              let engineHash = this.$store.state.preference.engines
+              let engineHash = _.cloneDeep(this.$store.state.preference.engines)
               if (_.isNil(engineHash)){
                   engineHash = {}
               }
               if (_.has(engineHash,this.form.name)){
                 this.$Message.error('Duplicate engine name')
+                return false
               }else{
-                  engineHash[this.form.name] = this.form
+                  engineHash[this.form.name]=this.form
               }
-
               this.$store.dispatch('preference/saveEngines', engineHash)
               this.$Message.success('Success')
             } else {
                 this.$Message.error('Validation Failed!')
             }
-            this.addShow = false
+            this.showAdd = false
         })
       },
 
@@ -164,17 +184,15 @@
     },
     created () {
       this.$store.watch(state => state.preference.engines, newEngines => {
-        this.engines = newEngines
+        this.engines = Object.values(newEngines)
       })
       this.loadEngines()
     },
     watch: {
         hasEngines () {
-            return  (!_.isNil(this.engines)) && this.engines.size>0
+            console.log("----hasEngines wathc changed")
+            return  (!_.isNil(this.engines)) && this.engines.length>0
         },
-        addedEngine() {
-            return this.engines.values()
-        }
     }
   }
 </script>

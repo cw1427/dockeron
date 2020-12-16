@@ -23,7 +23,8 @@ export default class Api {
   }
 
   loadEngines() {
-    return localStorage.engines
+    const result = localStorage.engines
+    return result ? JSON.parse(result) : {}
   }
 
   fetchPreference () {
@@ -44,7 +45,7 @@ export default class Api {
   }
 
   saveEngines (params = {}){
-    localStorage.engines = params
+    localStorage.engines = JSON.stringify(params)
     return true
   }
 

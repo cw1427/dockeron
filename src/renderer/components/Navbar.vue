@@ -15,8 +15,8 @@
                 <Dropdown>
                 <Icon :size="25" type="md-more"></Icon>
                 <DropdownMenu slot="list">
-                    <DropdownItem name="profile">profile</DropdownItem>
-                    <DropdownItem name="logout">logout</DropdownItem>
+                    <DropdownItem name="profile">Config</DropdownItem>
+                    <DropdownItem name="logout">About</DropdownItem>
                 </DropdownMenu>
                 </Dropdown>
              </div>

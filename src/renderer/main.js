@@ -33,7 +33,6 @@ function init(config){
 
 store.dispatch('preference/fetchPreference')
 .then((config) => {
-  console.info('[Dockeron] load preference:', config)
   init(config)
 })
 .catch((err) => {
