@@ -5,10 +5,12 @@
  */
 
 import api from '@/api'
+import {getBreadCrumbList} from '@/js/util'
 
 const state = {
   config: {port:2376,host:'127.0.0.1',ca:'', pem:'', key:''},
-  engines: null
+  engines: null,
+  breadCrumbList:[]
 }
 
 const mutations = {
@@ -17,7 +19,10 @@ const mutations = {
   },
   UPDATE_PREFERENCE_ENGINES (state, engines){
     state.engines = engines
-  }
+  },
+  UPDATE_BREAD_CRUMB(state, routeMetched) {
+    state.breadCrumbList = getBreadCrumbList(routeMetched)
+},
 }
 
 const actions = {

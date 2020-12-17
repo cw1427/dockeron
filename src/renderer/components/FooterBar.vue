@@ -1,5 +1,5 @@
 <template>
-  <div class="status-bar">
+  <div class="footer-bar">
     <span>Company &copy; 2020 Com,Inc. All Rights reserved. version:{{version}}</span>
   </div>
 </template>
@@ -25,7 +25,7 @@ const { version } = require('@/../../package.json')
 </script>
 
 <style scoped>
-  .status-bar {
+  .footer-bar {
     text-align: center;
     border-style: solid;
     border-width: thin;

@@ -1,7 +1,10 @@
 <template>
  <div class="main-container">
         <navbar></navbar>
-        <app-main></app-main>
+        <transition name="fade" mode="out-in">
+          <!-- <router-view :key="key"></router-view> -->
+          <router-view></router-view>
+        </transition>
         <footer-bar></footer-bar>
   </div>
 </template>
@@ -9,14 +12,12 @@
 <script>
 import Navbar from '@/components/Navbar'
 import FooterBar from '@/components/FooterBar'
-import AppMain from '@/components/AppMain'
 const { version } = require('@/../../package.json')
 
 export default {
   name: 'layout',
   components: {
     Navbar,
-    AppMain,
     FooterBar
   },
   data() {

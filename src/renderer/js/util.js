@@ -88,26 +88,13 @@ export const getBreadCrumbList = (routeMetched) => {
         return !item.meta.hideInMenu
     })
     return [{
-        name: 'home',
-        to: '/home'
+        name: 'Home',
+        icon: 'ios-home',
+        to: '/'
     }, ...res]
 }
 
 export const showTitle = (item, vm) => (item.meta && item.meta.title) || item.name
-
-/**
- * @description store the Tag list in local
- */
-export const setTagNavListInLocalstorage = list => {
-        localStorage.tagNaveList = JSON.stringify(list)
-    }
-    /**
-     * @returns {Array} restore the Tag list from localstore: name, path, meta
-     */
-export const getTagNavListFromLocalstorage = () => {
-    const list = localStorage.tagNaveList
-    return list ? JSON.parse(list) : []
-}
 
 /**
  * @param {Array} routers
@@ -128,19 +115,6 @@ export const getHomeRoute = routers => {
         }
     }
     return homeRoute
-}
-
-/**
- * @param {*} list get new Tag list
- * @param {*} newRoute new Tag route
- * @description check if exists in the Tag list, if not then add it
- */
-export const getNewTagList = (list, newRoute) => {
-    const { name, path, meta } = newRoute
-    let newList = [...list]
-    if (newList.findIndex(item => item.name === name) >= 0) return newList
-    else newList.push({ name, path, meta })
-    return newList
 }
 
 /**
@@ -188,21 +162,6 @@ export const getParams = url => {
 }
 
 /**
- * @param {Array} list The Tag list
- * @param {String} name current to be closed Tag name
- */
-export const getNextName = (list, name) => {
-    let res = ''
-    if (list.length === 2) {
-        res = 'home'
-    } else {
-        if (list.findIndex(item => item.name === name) === list.length - 1) res = list[list.length - 2].name
-        else res = list[list.findIndex(item => item.name === name) + 1].name
-    }
-    return res
-}
-
-/**
  * @param {Number} times execute times
  * @param {Function} callback callback function
  */
@@ -241,42 +200,11 @@ export const showByAccess = (access, canViewAccess) => {
     return hasOneOf(canViewAccess, access)
 }
 
-export const getTheme = () => {
-    const theme = localStorage.theme
-    return theme ? theme : 'dark'
-}
-
-export const setTheme = (theme) => {
-    localStorage.theme = theme
-}
-
 export const isEmptyObject = (e) => {
     var t;
     for (t in e)
         return !1;
     return !0
-}
-
-export const getAtsVersion = () => {
-    const v = localStorage.atsVersion
-    return v ? v : ''
-}
-
-export const setAtsVersion = (v) => {
-    if (v) {
-        localStorage.atsVersion = v
-    }
-}
-
-export const getAtsSha1 = () => {
-    const v = localStorage.atsSha1
-    return v ? v : ''
-}
-
-export const setAtsSha1 = (v) => {
-    if (v) {
-        localStorage.atsSha1 = v
-    }
 }
 
 export const isNestEmptyObj = (o) => {

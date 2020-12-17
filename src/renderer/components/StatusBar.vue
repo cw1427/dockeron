@@ -86,8 +86,7 @@
     border-color: #d7dde4;
     position: fixed;
     width: 100%;
-    left: 0;
-    bottom: 0;
+    bottom: 27px;
     padding: 0px 0px;
     height: 27px;
     /*max-height: 50px;*/

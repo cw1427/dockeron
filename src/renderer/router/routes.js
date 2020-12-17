@@ -1,5 +1,6 @@
 import * as Route from '../js/constants/RouteConstants'
 import Main from '@/components/HomePageView'
+import EngineLayout from '@/components/EngineView/SingleEngineLayout'
 
 export default [
   {
@@ -16,6 +17,26 @@ export default [
     ]
   },
   {
+    path: '/engine',
+    meta: {
+        title: 'engine',
+        icon: 'ios-build',
+        hideInMenu: true
+    },
+    component: EngineLayout,
+    children: [
+      {
+        path: '',
+        name: 'engine',
+        meta: {
+          icon: 'ios-cube',
+          title: 'Containers',
+        },
+        component: () => import('@/components/ContainersView/ContainersView')
+      },
+    ]
+  },
+  {
     path: '/containers',
     name: 'containers',
     meta: {
@@ -25,15 +46,6 @@ export default [
     redirect: Route.CONTAINERS_VIEW_PATH,
     component: Main,
     children: [
-      {
-        path: Route.DEFAULT_VIEW_PATH,
-        name: Route.DEFAULT_VIEW_NAME,
-        meta: {
-          icon: 'ios-cube',
-          title: 'Containers',
-        },
-        component: () => import('@/components/ContainersView/ContainersView')
-      },
       {
         path: Route.CONTAINERS_VIEW_PATH,
         name: Route.CONTAINERS_VIEW_NAME,
@@ -55,17 +67,15 @@ export default [
   },
   {
     path: '/image',
-    name: 'image',
     meta: {
         title: 'Image',
         icon: 'ios-apps'
     },
-    redirect: {'name':Route.IMAGES_VIEW_NAME},
     component: Main,
     children: [
       {
-        path: Route.IMAGES_VIEW_PATH,
-        name: Route.IMAGES_VIEW_NAME,
+        path: '',
+        name: 'image',
         meta: {
           hideInMenu: true,
         },
