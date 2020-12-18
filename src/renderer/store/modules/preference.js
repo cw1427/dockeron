@@ -10,7 +10,9 @@ import {getBreadCrumbList} from '@/js/util'
 const state = {
   config: {port:2376,host:'127.0.0.1',ca:'', pem:'', key:''},
   engines: null,
-  breadCrumbList:[]
+  breadCrumbList:[],
+  engine: null, // the selected engine name
+  engineInstance: null
 }
 
 const mutations = {
@@ -22,7 +24,13 @@ const mutations = {
   },
   UPDATE_BREAD_CRUMB(state, routeMetched) {
     state.breadCrumbList = getBreadCrumbList(routeMetched)
-},
+  },
+  UPDATE_PREFERENCE_ENGINE (state, engine){
+    state.engine = engine
+  },
+  UPDATE_PREFERENCE_ENGINE_INSTANCE(state, instance){
+    state.engineInstance = instance
+  },
 }
 
 const actions = {
@@ -48,9 +56,12 @@ const actions = {
     commit('UPDATE_PREFERENCE_ENGINES', engines)
     return api.saveEngines(engines)
   },
-//   changeThemeConfig ({ commit }, theme) {
-//     commit('UPDATE_PREFERENCE_DATA', { theme })
-//   },
+  updateSelectedEngine ({ commit }, engine) {
+    commit('UPDATE_PREFERENCE_ENGINE', { engine })
+  },
+  updateEngineInstance ({ commit }, instance) {
+    commit('UPDATE_PREFERENCE_ENGINE_INSTANCE', { instance })
+  },
 
 }
 

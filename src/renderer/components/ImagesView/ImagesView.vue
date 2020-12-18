@@ -40,8 +40,7 @@
   import ImageControlPanel from './ImageControlPanel'
   import FootLogsView from '../FootLogsView'
   import LoginPanel from '../DockerHubView/LoginPanel'
-
-  import docker from '../../js/docker'
+  import {createDockerEngine} from '../../js/docker'
   import notify from '../../js/notify'
   import notNull from '../../js/notNull'
   import parseRepoTag from '../../js/parseRepoTag'
@@ -61,13 +60,14 @@
         error: {},
         imagePullModal: false,
         repoTag: '',
-        footLogs: {}
+        footLogs: {},
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     watch: {
       images (newImages) {
         this.hasFoundImages = notNull(newImages) && newImages.length > 0
-      }
+      },
     },
     methods: {
       refreshImages () {
@@ -93,10 +93,10 @@
             this.$set(this.footLogs, 'pullLog', JSON.stringify(event))
           }
 
-          docker.modem.followProgress(stream, onFinished, onProgress)
+          this.docker.modem.followProgress(stream, onFinished, onProgress)
         }
 
-        docker.pull(this.repoTag)
+        this.docker.pull(this.repoTag)
           .then(imagePulled)
           .catch(notify)
       },
@@ -122,7 +122,7 @@
           notify(err)
         }
 
-        docker.listImages(queries)
+        this.docker.listImages(queries)
           .then(updateImages)
           .catch(updateErrored)
       },
@@ -141,6 +141,9 @@
       formatBytes
     },
     created () {
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine(newEngine)
+      })
       this.loadImages()
     }
   }

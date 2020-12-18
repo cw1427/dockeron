@@ -62,7 +62,7 @@
   import TreeView from './TreeView/TreeView'
   import StatusBar from './StatusBar'
   import SideMenu from './SideMenu'
-  import docker from '../js/docker'
+  import {createDockerEngine} from '@/js/docker'
   import notify from '../js/notify'
   import * as Route from '../js/constants/RouteConstants'
   import {
@@ -83,6 +83,7 @@
         info: {},
         version: {},
         ping: '',
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     methods: {
@@ -92,7 +93,7 @@
           this.ping = ping
         }
 
-        docker.ping()
+        this.docker.ping()
           .then(updateNetwork)
           .catch(notify)
       },
@@ -107,10 +108,13 @@
 
     },
     created () {
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine(newEngine)
+      })
 
       this.loadPing()
 
-      docker.getEvents()
+      this.docker.getEvents()
         .then(events => {
           events.setEncoding('utf8')
 

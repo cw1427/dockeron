@@ -30,7 +30,7 @@
 
 <script>
   import LoginPanel from './DockerHubView/LoginPanel'
-
+  import {createDockerEngine} from '../js/docker'
   import updateInfo from '../js/updateInfo'
   import updateVersion from '../js/updateVersion'
 
@@ -55,26 +55,30 @@
           ContainersRunning: 0,
           Images: 0
         },
-        version: {}
+        version: {},
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     methods: {
       refresh () {
-        updateInfo(this)
-        updateVersion(this)
+        updateInfo(this, this.docker)
+        updateVersion(this, this.docker)
       },
       timeFromEpic (time) {
         return new Date(time * 1000).toISOString()
       }
     },
     created () {
-      this.refresh()
       this.$store.watch(state => state.events.events, newEvents => {
         this.events = newEvents
       })
       this.$store.watch(state => state.info.info, newInfo => {
         this.info = newInfo
       })
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine(newEngine)
+      })
+      this.refresh()
     }
   }
 </script>
@@ -87,7 +91,8 @@
     position: fixed;
     width: 100%;
     bottom: 27px;
-    padding: 0px 0px;
+    right:0;
+    /*padding: 0px 0px;*/
     height: 27px;
     /*max-height: 50px;*/
     /*max-width: 800px;*/
@@ -111,7 +116,7 @@
 
   .refresh-button {
     position: absolute;
-    right: 0px;
+    /*right: 0px;*/
     /*top: 2px;*/
   }
 </style>

@@ -60,8 +60,8 @@
   import ContainerControlPanel from './ContainerControlPanel'
   import ContainerCreationForm from './ContainerCreationForm'
   import ContainerRunForm from './ContainerRunForm'
-
-  import docker from '@/js/docker'
+  import _ from 'lodash'
+  import {createDockerEngine} from '@/js/docker'
   import notify from '@/js/notify'
   import notNull from '@/js/notNull'
   import parseRepoTag from '@/js/parseRepoTag'
@@ -93,6 +93,7 @@
         ping: '',
         showInfo: false,
         showVersion: false,
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     watch: {
@@ -101,7 +102,7 @@
           notNull(newContainers) &&
         newContainers.length > 0
         )
-      }
+      },
     },
     methods: {
       confirmCreation () {
@@ -150,12 +151,11 @@
           this.error = err
           notify(err)
         }
-
-        docker.listContainers(queries)
+        this.docker.listContainers(queries)
           .then(updateContainers)
           .catch(updateErrored)
 
-        updateInfo(this)
+        //updateInfo(this)
       },
       formatBytes,
       loadInfo () {
@@ -164,7 +164,7 @@
           this.$store.dispatch(VUEX_ACTION_UPDATE_INFO, info)
         }
 
-        docker.info()
+        this.docker.info()
           .then(updateInfo)
           .catch(notify)
       },
@@ -174,7 +174,7 @@
           this.$store.dispatch(VUEX_ACTION_UPDATE_VERSION, version)
         }
 
-        docker.version()
+        this.docker.version()
           .then(updateVersion)
           .catch(notify)
       },
@@ -186,9 +186,15 @@
       this.$store.watch(state => state.version.version, newVersion => {
         this.version = newVersion
       })
-      this.loadInfo()
-      this.loadVersion()
-      this.loadContainers()
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine( newEngine )
+      })
+
+    },
+    mounted(){
+       this.loadInfo()
+       this.loadVersion()
+       this.loadContainers()
     }
   }
 </script>

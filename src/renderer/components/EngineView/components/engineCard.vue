@@ -1,5 +1,5 @@
 <template>
-    <Card style="" to="/engine">
+    <Card style="" :to="toRoute">
         <p slot="title">
             <Row type="flex" align="middle" :gutter="10">
                     <Row>
@@ -52,7 +52,9 @@ export default {
     },
   },
   computed: {
-
+      toRoute(){
+         return `/engine/${this.engine.name}`
+      }
   }
 }
 </script>

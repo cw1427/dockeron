@@ -19,7 +19,7 @@
     <div v-show="nameInput">
       <Input class="new-name-input" v-model="name" placeholder="Please give a name."></Input>
       <Button class="new-button" type="primary" icon="checkmark-round" shape="circle" @click="add" size="small"></Button>
-      <Button class="new-button" type="ghost" icon="close-round" shape="circle" @click="cancel" size="small"></Button>
+      <Button class="new-button" type="primary" icon="close-round" shape="circle" @click="cancel" size="small"></Button>
     </div>
     <!-- </Modal> -->
   </div>
@@ -27,12 +27,9 @@
 
 <script>
   export default {
-    props: {
-      isArray: {
-        type: Boolean,
-        default: false
-      }
-    },
+    props:[
+      'isArray'
+    ],
     data () {
       return {
         type: '',

@@ -13,18 +13,11 @@
     components: {
       JsonNode
     },
-    props: {
-      labelWidth: {
-        type: Number,
-        default: 40
-      },
-      name: {
-        type: String,
-        default: ''
-      },
-      // JSON data
-      value: [Object, Array]
-    },
+    props:[
+      'labelWidth',
+      'name',
+      'value'
+    ],
     methods: {
       clear () {
         this.$emit('input', {})

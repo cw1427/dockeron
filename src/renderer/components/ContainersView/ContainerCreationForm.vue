@@ -27,7 +27,7 @@
   import JsonForm from '../JsonForm/JsonForm'
 
   import { ipcRenderer } from 'electron'
-  import docker from '../../js/docker'
+  import {createDockerEngine} from '@/js/docker'
   import notify from '../../js/notify'
   import jsonFileImportInit from '../../js/jsonFileImportInit'
   import { IPC_CHANNEL_OPEN_FILE_DIALOG } from '../../js/constants/ElectronConstants'
@@ -36,12 +36,9 @@
     components: {
       JsonForm
     },
-    props: {
-      value: {
-        type: String,
-        default: ''
-      }
-    },
+    props:[
+      'value'
+    ],
     data () {
       return {
         defaultSettings: {
@@ -50,7 +47,8 @@
           Tty: true
         },
         importedSettings: {},
-        advancedSettings: {}
+        advancedSettings: {},
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     watch: {
@@ -70,7 +68,7 @@
           this.$emit('failed', err)
         }
 
-        docker.createContainer({...this.defaultSettings, ...this.advancedSettings})
+        this.docker.createContainer({...this.defaultSettings, ...this.advancedSettings})
           .then(containerCreated)
           .catch(creationErrored)
 
@@ -88,6 +86,9 @@
       }
     },
     created () {
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine( newEngine )
+      })
       this.stringifiedSettings = JSON.stringify(this.importedSettings, null, 4)
 
       const readFileCB = (err, data) => {

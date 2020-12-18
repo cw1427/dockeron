@@ -59,7 +59,7 @@
   import TreeView from '../TreeView/TreeView'
 
   import fs from 'fs'
-  import docker from '../../js/docker'
+  import {createDockerEngine} from '../../js/docker'
   import notify from '../../js/notify'
   import { STREAM_READABLE_EVENT_END } from '../../js/constants/StreamConstants'
 
@@ -105,12 +105,13 @@
         rmiParams: {
           force: false,
           noprune: false
-        }
+        },
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     watch: {
       imageId (newImageId) {
-        this.image = docker.getImage(newImageId)
+        this.image = this.docker.getImage(newImageId)
       },
       imageRepoTags (newRepoTags) {
         this.selectedImage = newRepoTags[0]
@@ -198,7 +199,10 @@
       }
     },
     created () {
-      this.image = docker.getImage(this.imageId)
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine(newEngine)
+      })
+      this.image = this.docker.getImage(this.imageId)
       if (this.fullPanel) {
         this.inspectImage()
       }

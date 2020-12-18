@@ -5,13 +5,13 @@
         <Panel>
           {{prop}}
           <Poptip confirm title="Delete this?" @on-ok="deleteNode">
-            <Button class="delete-button" type="ghost" shape="circle" icon="close-round" size="small"></Button>
+            <Button class="delete-button" type="primary" shape="circle" icon="close-round" size="small"></Button>
           </Poptip>
           <p slot="content">
             <template v-for="(item, index) in internalValue">
               <json-node :prop="index.toString()" v-model="internalValue[index]"></json-node>
             </template>
-            <add-new-node :is-array="true" @add-new-node="add"></add-new-node>
+            <add-new-node :isArray="true" @add-new-node="add"></add-new-node>
           </p>
         </Panel>
       </Collapse>
@@ -66,10 +66,9 @@
         internalValue: this.value
       }
     },
-    props: {
-      prop: [String, Number],
-      value: null
-    },
+    props: [
+      'prop','value'
+    ],
     components: {
       'json-node': this,
       'add-new-node': AddNewNode

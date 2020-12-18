@@ -50,7 +50,6 @@ export default {
     }
   },
    mounted () {
-      console.log(this.$route.matched)
       this.UPDATE_BREAD_CRUMB(this.$route.matched)
   },
   methods: {

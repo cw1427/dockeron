@@ -4,7 +4,7 @@ import EngineLayout from '@/components/EngineView/SingleEngineLayout'
 
 export default [
   {
-    path: "/dashboard",
+    path: "/",
     name: 'dashboard',
     component: ()=> import('@/components/Dashboard'),
     redirect: 'engines',
@@ -17,11 +17,11 @@ export default [
     ]
   },
   {
-    path: '/engine',
+    path: '/engine/:name',
+    name:'engine',
     meta: {
-        title: 'engine',
-        icon: 'ios-build',
-        hideInMenu: true
+       title: 'Containers',
+       icon: 'ios-home'
     },
     component: EngineLayout,
     children: [
@@ -31,47 +31,30 @@ export default [
         meta: {
           icon: 'ios-cube',
           title: 'Containers',
+          hideInMenu: true,
         },
         component: () => import('@/components/ContainersView/ContainersView')
       },
-    ]
-  },
-  {
-    path: '/containers',
-    name: 'containers',
-    meta: {
-        title: 'HomePage',
-        icon: 'ios-home'
-    },
-    redirect: Route.CONTAINERS_VIEW_PATH,
-    component: Main,
-    children: [
       {
-        path: Route.CONTAINERS_VIEW_PATH,
-        name: Route.CONTAINERS_VIEW_NAME,
-        component: () => import('@/components/ContainersView/ContainersView')
-      },
-      {
-        path: Route.SINGLE_CONTAINER_VIEW_PATH,
-        name: Route.SINGLE_CONTAINER_VIEW_NAME,
+        path: '/container',
+        name: 'container',
         meta: {
           icon: 'md-construct',
           title: 'Single',
-          hide: true,
           hideInMenu: true,
         },
         component: () => import('@/components/ContainersView/SingleContainerView')
       },
-
     ]
   },
   {
     path: '/image',
+    name: 'image',
     meta: {
         title: 'Image',
         icon: 'ios-apps'
     },
-    component: Main,
+    component: EngineLayout,
     children: [
       {
         path: '',
@@ -90,7 +73,7 @@ export default [
         title: 'Setting',
         icon: 'ios-build'
     },
-    component: Main,
+    component: EngineLayout,
     children: [
       {
         path: Route.SETTINGS_CONFIG_PATH,
@@ -105,6 +88,6 @@ export default [
   },
   {
     path: '*',
-    redirect: '/dashboard'
+    redirect: '/'
   }
 ]

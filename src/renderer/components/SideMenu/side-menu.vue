@@ -18,6 +18,7 @@
 import SideMenuItem from './side-menu-item.vue'
 import { getUnion } from '@/js/util'
 import mixin from './mixin'
+import _ from 'lodash'
 
 export default {
   name: 'SideMenu',
@@ -46,7 +47,7 @@ export default {
     },
     accordion: {
       type: Boolean,
-      default: true
+      default: false
     },
     activeName: {
       type: String,
@@ -64,9 +65,14 @@ export default {
   },
   methods: {
     handleSelect (name) {
-      this.$emit('on-select', name)
+      if (name !== this.$route.name){
+        this.$emit('on-select', name)
+      }
     },
     getOpenedNamesByActiveName (name) {
+      if (_.isEmpty(name)){
+          return this.$store.getters.openNames
+      }
       return this.$route.matched.map(item => item.name).filter(item => item !== name)
     }
   },
@@ -85,13 +91,14 @@ export default {
     },
     openedNames () {
       this.$nextTick(() => {
-        // horizon menu no need to open the actived menu.
-        //this.$refs.menu.updateOpened()
+        this.$refs.menu.updateOpened()
       })
     }
   },
   mounted () {
     this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName(name))
+  },
+  created(){
   }
 }
 </script>

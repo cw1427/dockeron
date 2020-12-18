@@ -40,9 +40,8 @@
 
 <script>
   import JsonForm from '../JsonForm/JsonForm'
-
+  import {createDockerEngine} from '@/js/docker'
   import { ipcRenderer } from 'electron'
-  import docker from '../../js/docker'
   import notify from '../../js/notify'
   import jsonFileImportInit from '../../js/jsonFileImportInit'
   import { IPC_CHANNEL_OPEN_FILE_DIALOG } from '../../js/constants/ElectronConstants'
@@ -51,12 +50,8 @@
     components: {
       JsonForm
     },
-    props: {
-      value: {
-        type: String,
-        default: ''
-      }
-    },
+    props: ['value'
+    ],
     data () {
       return {
         imageName: this.value,
@@ -77,7 +72,8 @@
           Volumes: {},
           VolumesFrom: []
         },
-        creationSettings: {}
+        creationSettings: {},
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     watch: {
@@ -125,7 +121,7 @@
           this.creationSettings.name = this.newContainerName
         }
 
-        docker.run(this.imageName, this.cmdToBeExecuted, streams, this.creationSettings,
+        this.docker.run(this.imageName, this.cmdToBeExecuted, streams, this.creationSettings,
           (err, data, container) => {
             if (err) {
               creationErrored(err)
@@ -161,6 +157,9 @@
       }
     },
     created () {
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine( newEngine )
+      })
       this.creationSettings = this.importedSettings
 
       const readFileCB = (err, data) => {

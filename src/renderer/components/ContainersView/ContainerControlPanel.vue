@@ -52,10 +52,9 @@
 <script>
   import TreeView from '../TreeView/TreeView'
   import FootLogsView from '../FootLogsView'
-
+  import {createDockerEngine} from '@/js/docker'
   import fs from 'fs'
   import { ipcRenderer } from 'electron'
-  import docker from '../../js/docker'
   import notify from '../../js/notify'
   import tarFileSaveInit from '../../js/tarFileSaveInit'
   import { IPC_CHANNEL_OPEN_SAVE_DIALOG } from '../../js/constants/ElectronConstants'
@@ -118,12 +117,13 @@
           v: false,
           force: false,
           link: false
-        }
+        },
+        docker: this.$store.state.preference.engineInstance.instance
       }
     },
     watch: {
       containerId (newContainerId) {
-        this.container = docker.getContainer(newContainerId)
+        this.container = this.docker.getContainer(newContainerId)
       }
     },
     methods: {
@@ -320,7 +320,10 @@
       }
     },
     created () {
-      this.container = docker.getContainer(this.containerId)
+      this.$store.watch(state => state.preference.engine, newEngine => {
+        this.docker = createDockerEngine( newEngine )
+      })
+      this.container = this.docker.getContainer(this.containerId)
       if (this.fullPanel) {
         this.inspectContainer()
       }

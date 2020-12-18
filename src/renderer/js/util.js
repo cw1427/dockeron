@@ -69,6 +69,21 @@ export const getMenuByRouter = (list, access) => {
     return res
 }
 
+export const getOpenMenuByRouter = (list, access) => {
+    let res = []
+    forEach(list, item => {
+        if (item.meta && !item.meta.hideInMenu) {
+            let obj = item.name
+            let children = []
+            if (hasChild(item) && showThisMenuEle(item, access)) {
+                children = getMenuByRouter(item.children, access)
+            }
+            if (showThisMenuEle(item, access) && children.length >=1) res.push(obj)
+        }
+    })
+    return res
+}
+
 /**
  * @param {Array} routeMetched metched current route
  * @returns {Array}
