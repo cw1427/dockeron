@@ -49,7 +49,7 @@ export default {
 
     checkUpdate(){
        this.$Message.success('Start checking...')
-       this.$electron.ipcRenderer.send('command', 'application:check-for-updates')
+       this.$electron.ipcRenderer.send('event', 'application:check-for-updates')
     }
   }
 }

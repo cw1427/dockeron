@@ -12,3 +12,4 @@ thumbs.db
 .idea
 dockeron.iml
 .vscode
+release/*
