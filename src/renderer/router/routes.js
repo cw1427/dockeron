@@ -1,18 +1,19 @@
 import * as Route from '../js/constants/RouteConstants'
 import Main from '@/components/HomePageView'
+import MainLayout from '@/components/MainLayout'
 import EngineLayout from '@/components/EngineView/SingleEngineLayout'
 
 export default [
   {
     path: "/",
-    name: 'dashboard',
-    component: ()=> import('@/components/Dashboard'),
+    name: 'home',
+    component: MainLayout,
     redirect: 'engines',
     children:[
       {
         path: '/engines',
         name: 'engines',
-        component: () => import('@/components/EngineView/Engines')
+        component: ()=> import ('@/components/EngineView/Engines')
       },
     ]
   },
@@ -83,6 +84,24 @@ export default [
           title: 'Config',
         },
         component: () => import('@/components/SettingConfigView')
+      },
+    ]
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: MainLayout,
+    children: [
+      {
+        path: '',
+        name: 'about',
+        meta: {
+          icon: 'md-construct',
+          title: 'Config',
+          hideInMenu:true,
+          hide:true
+        },
+        component: () => import('@/components/About')
       },
     ]
   },

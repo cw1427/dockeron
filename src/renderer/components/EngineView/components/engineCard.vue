@@ -1,5 +1,6 @@
 <template>
-    <Card style="" :to="toRoute">
+    <a @click="handleEngineTo">
+    <Card style="">
         <p slot="title">
             <Row type="flex" align="middle" :gutter="10">
                     <Row>
@@ -7,10 +8,14 @@
                     </Row>
             </Row>
         </p>
-        <a href="#" slot="extra" @click.prevent="gotoProfile">
-            <Icon type="person"></Icon>
-            Modify
-        </a>
+        <div slot="extra" @click.stop="">
+            <Poptip :transfer="true" :confirm="true" title="Confirm delete?" content="Please confirm"  @on-ok="handleDelete(engine.name)">
+                <a >
+                    <Icon type="ios-trash"></Icon>
+                    Delete
+                </a>
+            </Poptip>
+        </div>
 
         <div class="profile-user-info profile-user-info-striped">
             <div class="profile-info-row ">
@@ -33,11 +38,13 @@
             </div>
         </div>
     </Card>
+    </a>
 
 </template>
 
 <script>
 import './engineCard.less'
+import _ from 'lodash'
 export default {
   name: 'EngineCard',
   props:['engine'],
@@ -47,9 +54,25 @@ export default {
     }
   },
   methods: {
-      gotoProfile() {
-        this.$router.push('profile')
+    handleDelete(name) {
+        // remove the engines list config
+        let engineHash = _.cloneDeep(this.$store.state.preference.engines)
+        if (_.isNil(engineHash)){
+            return true
+        }
+        if (_.has(engineHash,name)){
+            engineHash = _.omit(engineHash,[name])
+        }else{
+            this.$Message.error('Wrong engine name')
+            return false
+        }
+        this.$store.dispatch('preference/saveEngines', engineHash)
+        this.$Message.success('Success')
     },
+    handleEngineTo(){
+        this.$router.push(this.toRoute)
+    }
+
   },
   computed: {
       toRoute(){

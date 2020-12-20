@@ -1,9 +1,9 @@
 'use strict'
 
 process.env.BABEL_ENV = 'main'
-
+const devMode = process.env.NODE_ENV !== 'production'
 const path = require('path')
-const { dependencies } = require('../package.json')
+const { dependencies, build } = require('../package.json')
 const webpack = require('webpack')
 const MinifyPlugin = require("babel-minify-webpack-plugin")
 // const BabiliWebpackPlugin = require('babili-webpack-plugin')
@@ -65,10 +65,11 @@ let mainConfig = {
 /**
  * Adjust mainConfig for development settings
  */
-if (process.env.NODE_ENV !== 'production') {
+if (devMode) {
   mainConfig.plugins.push(
     new webpack.DefinePlugin({
-      '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
+      '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`,
+      'appId': `"${build.appId}"`
     })
   )
 }
@@ -76,7 +77,7 @@ if (process.env.NODE_ENV !== 'production') {
 /**
  * Adjust mainConfig for production settings
  */
-if (process.env.NODE_ENV === 'production') {
+if (!devMode) {
   mainConfig.plugins.push(
     new MinifyPlugin(),
     // new BabiliWebpackPlugin({
@@ -84,7 +85,8 @@ if (process.env.NODE_ENV === 'production') {
     //   removeDebugger: true
     // }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"'
+      'process.env.NODE_ENV': '"production"',
+      'appId': `"${build.appId}"`
     })
   )
 }

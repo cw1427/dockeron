@@ -10,6 +10,7 @@ module.exports = {
   },
   extends: 'standard',
   globals: {
+    appId: true,
     __static: true
   },
   plugins: [

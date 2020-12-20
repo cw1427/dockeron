@@ -6,15 +6,16 @@
         <Row>
             <Col span="3">
             <div class="header-inner">
-                <Select v-model="projectSelect" style="width:100px">
+                <Select v-model="selectedEngine" style="width:100px" @on-change="filterEngine" :filterable="true">
                     <Option value="All" key="All">All</Option>
+                    <Option v-for="item in engines" :value="item.name" :key="item.name">{{ item.name }}</Option>
                 </Select>
             </div>
             </Col>
-            <Col span="4">
+            <Col span="15">
                 <bread-crumb :list="breadCrumbList"></bread-crumb>
             </Col>
-             <Col span="13">
+             <Col span="1">
              <div class="user-avator-dropdown">
                 <Dropdown>
                 <Icon :size="25" type="md-more"></Icon>
@@ -34,6 +35,8 @@
   import minLogo from '@/assets/img/logo.jpg'
   import BreadCrumb from './components/BreadCrumb'
   import { mapMutations } from 'vuex'
+  import _ from 'lodash'
+  import {createDockerEngine} from '@/js/docker'
 export default {
   components: {
      BreadCrumb
@@ -41,7 +44,8 @@ export default {
   data() {
     return {
         minLogo,
-        projectSelect:[]
+        selectedEngine:this.$store.state.preference.engine.engine,
+        engines: Object.values(this.$store.state.preference.engines)
     }
   },
   computed: {
@@ -56,6 +60,16 @@ export default {
       ...mapMutations('preference',[
         'UPDATE_BREAD_CRUMB',
       ]),
+      filterEngine(){
+        if (this.selectedEngine == 'All'){
+            this.$router.push('/')
+            return
+        }
+        this.$store.dispatch('preference/updateSelectedEngine', this.selectedEngine)
+        let docker = createDockerEngine(this.selectedEngine)
+        this.$store.dispatch('preference/updateEngineInstance', docker)
+        this.$router.replace(`/engine/${this.selectedEngine}`)
+      }
   },
   watch: {
       '$route' (newRoute) {

@@ -10,7 +10,7 @@
             <Content>
               <transition name="fade" mode="out-in">
                 <!-- <router-view :key="key"></router-view> -->
-                <router-view></router-view>
+                <router-view :key="$route.fullPath"></router-view>
               </transition>
               <status-bar></status-bar>
             </Content>

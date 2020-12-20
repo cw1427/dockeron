@@ -45,12 +45,16 @@
     "productName": "Dockeron",
     "appId": "org.dockeron.dockeron",
     "directories": {
-      "output": "build"
+      "output": "release"
     },
     "files": [
       "dist/electron/**/*"
     ],
     "dmg": {
+      "window": {
+        "width": 540,
+        "height": 380
+      },
       "contents": [
         {
           "x": 410,
@@ -66,14 +70,52 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "release/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "release/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "extraResources": {
+      }
+
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "bjextart-Setup-${version}.${ext}"
     },
     "linux": {
       "icon": "build/icons"
-    }
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://<your company>/dockeron/"
+      }
+    ]
   },
   "dependencies": {
     "@babel/runtime": "^7.9.2",

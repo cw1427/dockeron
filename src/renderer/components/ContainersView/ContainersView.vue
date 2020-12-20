@@ -118,6 +118,7 @@
         this.$refs.containerRunForm.reset()
       },
       refreshContainers () {
+        this.error = 'Refreshing...'
         this.loadContainers()
         if (notNull(this.error) && this.error !== {}) {
           notify(`Refreshed: ${this.containers.length} containers found!`)

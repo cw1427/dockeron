@@ -4,19 +4,20 @@
             <Col span="4">
             <div class="header-inner">
                <!-- <h1><a >Dockeron<span></span></a></h1> -->
-               <img :src="minLogo" width="160" height="50"/>
+               <a @click="$router.push('/')"><img :src="minLogo" width="160" height="50"/></a>
             </div>
             </Col>
-            <Col span="6">
+            <Col span="15">
             <span class="heading_span">My docker engines</span>
             </Col>
-             <Col span="13">
+             <Col span="1">
              <div class="user-avator-dropdown">
-                <Dropdown>
+                <Dropdown @on-click="handleClick">
                 <Icon :size="25" type="md-more"></Icon>
                 <DropdownMenu slot="list">
-                    <DropdownItem name="profile">Config</DropdownItem>
-                    <DropdownItem name="logout">About</DropdownItem>
+                    <DropdownItem name="home">Home</DropdownItem>
+                    <DropdownItem name="globalConfig">Config</DropdownItem>
+                    <DropdownItem name="about">About</DropdownItem>
                 </DropdownMenu>
                 </Dropdown>
              </div>
@@ -41,7 +42,18 @@ export default {
 
   },
   methods: {
-
+    handleClick (name) {
+      switch (name) {
+        case 'globalConfig':
+          break
+        case 'about':
+          this.$router.push({name:'about'})
+          break
+        case 'home':
+          this.$router.push({name:'home'})
+          break
+      }
+    }
   }
 }
 </script>
@@ -92,6 +104,7 @@ export default {
   border-right-width: 1px;
   border-right-style: solid;
   border-right-color: rgb(235, 235, 235);
+  text-align: center
 
 }
 
