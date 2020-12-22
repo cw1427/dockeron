@@ -40,8 +40,8 @@ let mainConfig = {
     ]
   },
   node: {
-    __dirname: process.env.NODE_ENV !== 'production',
-    __filename: process.env.NODE_ENV !== 'production'
+    __dirname: devMode,
+    __filename: devMode
   },
   output: {
     filename: '[name].js',
@@ -80,10 +80,6 @@ if (devMode) {
 if (!devMode) {
   mainConfig.plugins.push(
     new MinifyPlugin(),
-    // new BabiliWebpackPlugin({
-    //   removeConsole: true,
-    //   removeDebugger: true
-    // }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"',
       'appId': `"${build.appId}"`

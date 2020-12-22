@@ -49,7 +49,7 @@
         }
       },
       handleClose: function () {
-        this.win.close()
+        //this.win.close()
         this.$electron.ipcRenderer.send('event', 'application:quit')
       }
     }

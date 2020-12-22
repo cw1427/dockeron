@@ -120,9 +120,6 @@
         },
       }
     },
-    watch: {
-
-    },
     methods: {
 
       loadEngines () {
@@ -189,9 +186,8 @@
       this.loadEngines()
     },
     watch: {
-        hasEngines () {
-            console.log("----hasEngines wathc changed")
-            return  (!_.isNil(this.engines)) && this.engines.length>0
+        engines () {
+            this.hasEngines = (!_.isNil(this.engines)) && this.engines.length>0
         },
     }
   }

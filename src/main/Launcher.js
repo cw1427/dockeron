@@ -66,8 +66,8 @@ export default class Launcher extends EventEmitter {
 
   handleAppEvents () {
     // No need to handle openUrl or openFile
-    this.handleOpenUrl()
-    this.handleOpenFile()
+    // this.handleOpenUrl()
+    // this.handleOpenFile()
     this.handelAppReady()
     this.handleAppWillQuit()
   }
